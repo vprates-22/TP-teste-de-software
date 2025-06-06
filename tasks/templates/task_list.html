@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minhas Tarefas</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h2>Minhas Tarefas</h2>
+
+    <!-- Filtro por tag -->
+    <div class="tag-filter">
+      <strong>Filtrar por tag:</strong>
+      <a href="{% url 'tasks:task_list' %}">Todas</a>
+      {% for tag in tags %}
+        <a href="?tag={{ tag.name }}">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+
+    {% for task in tasks %}
+      <div class="task{% if task.completed %} completed{% endif %}">
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+
+        {% if task.tags.all %}
+          <p><strong>Tags:</strong>
+            {% for tag in task.tags.all %}
+              <span class="tag">{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
+
+        <p><strong>Prioridade:</strong>
+          {% if task.priority == '1' %}Alta
+          {% elif task.priority == '2' %}Média
+          {% else %}Baixa
+          {% endif %}
+        </p>
+
+        <form method="post" action="{% url 'tasks:task_toggle' task.id %}" style="display:inline;">
+          {% csrf_token %}
+          {% if not task.completed %}
+            <button type="submit">Concluir</button>
+          {% endif %}
+        </form>
+
+        <form method="post" action="{% url 'tasks:task_delete' task.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Remover</button>
+        </form>
+      </div>
+    {% empty %}
+      <p>Nenhuma tarefa encontrada.</p>
+    {% endfor %}
+
+    <p><a href="{% url 'tasks:task_create' %}">Adicionar Nova Tarefa</a></p>
+    <p><a href="{% url 'tasks:logout' %}">Logout</a></p>
+  </div>
+</body>
+</html>
