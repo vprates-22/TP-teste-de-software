@@ -23,8 +23,7 @@ jobs:
 
       - name: Run Tests with Coverage
         run: |
-          coverage run manage.py test
-          coverage xml
+          pytest --cov --cov-branch --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
