@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 def landing_page(request):
     if request.user.is_authenticated:
         return redirect('task_list')
-    return render(request, 'tasks/landing.html')
+    return render(request, 'landing.html')
 
 def user_signup(request):
     if request.method == 'POST':
@@ -19,7 +19,7 @@ def user_signup(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-    return render(request, 'tasks/signup.html', {'form': form})
+    return render(request, 'signup.html', {'form': form})
 
 @login_required
 def task_list(request):
@@ -58,6 +58,13 @@ def task_edit(request, pk):
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)
     task.delete()
+    return redirect('tasks:task_list')
+
+@login_required
+def toggle_favorite(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task.is_favorite = not task.is_favorite
+    task.save()
     return redirect('tasks:task_list')
 
 @login_required

@@ -25,6 +25,7 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, blank=True)
+    is_favorite = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

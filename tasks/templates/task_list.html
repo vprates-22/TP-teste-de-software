@@ -49,6 +49,13 @@
           {% csrf_token %}
           <button type="submit">Remover</button>
         </form>
+
+        <form method="post" action="{% url 'tasks:task_favorite' task.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">
+            {% if task.is_favorite %}★ Desfavoritar{% else %}☆ Favoritar{% endif %}
+          </button>
+        </form>
       </div>
     {% empty %}
       <p>Nenhuma tarefa encontrada.</p>
