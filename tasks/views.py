@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 def landing_page(request):
     if request.user.is_authenticated:
-        return redirect('task_list')
+        return redirect('tasks:task_list')
     return render(request, 'landing.html')
 
 def user_signup(request):
@@ -16,7 +16,7 @@ def user_signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('tasks:login')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
